@@ -23,6 +23,8 @@
 #include "box2d/b2_broad_phase.h"
 #include <string.h>
 
+#define CASTLE_MAX_PAIR_COUNT 5000
+
 b2BroadPhase::b2BroadPhase()
 {
 	m_proxyCount = 0;
@@ -112,6 +114,10 @@ bool b2BroadPhase::QueryCallback(int32 proxyId)
 		// Both proxies are moving. Avoid duplicate pairs.
 		return true;
 	}
+
+  if (m_pairCount > CASTLE_MAX_PAIR_COUNT) {
+    return false;
+  }
 
 	// Grow the pair buffer as needed.
 	if (m_pairCount == m_pairCapacity)
